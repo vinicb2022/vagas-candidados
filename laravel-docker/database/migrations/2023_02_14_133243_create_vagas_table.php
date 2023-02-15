@@ -18,7 +18,7 @@ class CreateVagasTable extends Migration
             $table->string('nome');
             $table->text('descricao');
             $table->double('remuneracao', 10, 2)->nullable();
-            $table->boolean('status');
+            $table->boolean('status')->default(1);
             $table->timestamps();
         });
     }
