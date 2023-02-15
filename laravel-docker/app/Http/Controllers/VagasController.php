@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\TiposVagasModel;
 use App\Models\LocaisVagasModel;
 use App\Models\VagasModel;
+use App\Models\CandidatosModel;
+use App\Models\CandidatosVagasModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class VagasController extends Controller
 {
@@ -13,26 +16,41 @@ class VagasController extends Controller
     private $tipoVaga;
     private $localVaga;
     private $vaga;
+    private $candidato;
+    private $candidatoVaga;
 
     public function __construct()
     {
         $this->tipoVaga = new TiposVagasModel();
         $this->localVaga = new LocaisVagasModel();
         $this->vaga = new VagasModel();
+        $this->candidato = new CandidatosModel();
+        $this->candidatoVaga = new CandidatosVagasModel();
     }
 
     public function index()
     {
         $vagas = $this->vaga->paginate(20);
-
+        $id = Auth::id();
+        $candidato = $this->candidato->where(['usuario_id' => $id])->get()->first();
+        if ($candidato) {
+            foreach ($vagas as $vaga) {
+                $vaga->applied = false;
+                $candidatoVaga = $this->candidatoVaga->where([
+                                                        'candidato_id' => $candidato['id'],
+                                                        'vaga_id' => $vaga->id
+                                                     ])
+                                                     ->get()
+                                                     ->first();
+    
+                if ($candidatoVaga) {
+                    $vaga->applied = true;
+                }
+            }
+        }
         return view('vagas.index', compact('vagas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         $tipos = $this->tipoVaga->all();
@@ -40,12 +58,6 @@ class VagasController extends Controller
         return view('vagas.create', compact('tipos', 'locais'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 
@@ -57,34 +69,31 @@ class VagasController extends Controller
                                     'local_id' => $request->local,
                                 ]);
         if ($cadastro) {
-            return redirect('vagas')->with('sucess', 'Vaga criada com sucesso');
+            return redirect('vagas')->with('success', 'Vaga criada com sucesso');
         }
         else {
             return redirect('vagas')->with('error', 'Vaga não pode ser criada');
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
         $vaga = $this->vaga->find($id);
         $tipo = $vaga->find($vaga->id)->relTipo;
-        $local = $vaga->find($vaga->id)->relLocal;  
+        $local = $vaga->find($vaga->id)->relLocal;
+        $id = Auth::id();
+        $candidato = $this->candidato->where(['usuario_id' => $id])->get()->first();
 
-        return view('vagas.show', compact('vaga', 'tipo', 'local'));
+        $candidatoVaga = $this->candidatoVaga->where([
+                                                    'candidato_id' => $candidato['id'],
+                                                    'vaga_id' => $vaga->id
+                                                 ])
+                                             ->get()
+                                             ->first(); 
+
+        return view('vagas.show', compact('vaga', 'tipo', 'local', 'candidatoVaga'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $vaga = $this->vaga->find($id);
@@ -95,13 +104,6 @@ class VagasController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $this->vaga->where(['id' => $id])
@@ -113,19 +115,26 @@ class VagasController extends Controller
                         'local_id' => $request->local,
                    ]);
 
-        return redirect('vagas')->with('sucess', 'Vaga editada com sucesso');
+        return redirect('vagas')->with('success', 'Vaga editada com sucesso');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $this->vaga->where(['id' => $id])->delete();
 
-        return redirect('vagas')->with('sucess', 'Vaga deletada com sucesso');
+        return redirect('vagas')->with('success', 'Vaga deletada com sucesso');
+    }
+
+    public function changeStatus($id, $status) {
+        if ($status == 1) {
+            $this->vaga->where(['id' => $id])->update(['status' => 2]);
+        }
+        else {
+            $this->vaga->where(['id' => $id])->update(['status' => 1]);
+
+        }
+
+        return redirect('vagas')->with('success', 'Vaga atualizada com sucesso');
+
     }
 }

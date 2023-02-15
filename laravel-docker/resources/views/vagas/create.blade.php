@@ -9,9 +9,9 @@
         @endif
     </h3>
     <hr>
-    @if (Session::has('sucess'))
-        <div class="alert alert-sucess" role="alert">
-            {{Session::get('sucess')}}
+    @if (Session::has('success'))
+        <div class="alert alert-success" role="alert">
+            {{Session::get('success')}}
         </div>
     @endif
     <div class="col-md-10 m-auto">

@@ -5,28 +5,15 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between" >
-                        <div>Vagas</div>
+                @can ('anunciante')
+                  <div class="card-header">
+                      <div class="d-flex justify-content-between" >
+                          <div>Vagas</div>
                           <div><a href="{{route('vagas.create')}}" class="btn btn-success">Criar Vaga</a></div>
-                    </div>
-                </div>
-                <div class="card-body">
-                 <div class="mb-2">
-                      <form class="form-inline" action="">
-                      <label for="category_filter">Filtrar por Categoria &nbsp;</label>
-                       <select class="form-control" id="category_filter" name="category">
-                        <option value="">Selecionar Categoria</option>
-                      </select>
-                      <label for="keyword">&nbsp;&nbsp;</label>
-                      <input type="text" class="form-control"  name="keyword" placeholder="Enter keyword" id="keyword">
-                      <span>&nbsp;</span> 
-                       <button type="button" onclick="search_post()" class="btn btn-primary" >Search</button>
-                       @if (Request::query('category') || Request::query('keyword'))
-                        <a class="btn btn-success" href="{{route('posts.index')}}">Clear</a>
-                       @endif
-                    </form>
+                      </div>
                   </div>
+                @endcan
+                <div class="card-body">
                   <div class="table table-striped table-hover table-bordered table-responsive">
                     <table style="width: 100%;" class="table table-stripped ">
                       <thead>
@@ -36,6 +23,7 @@
                           <th class="text-center">Tipo</th>
                           <th class="text-center">Local</th>
                           <th class="text-center">Remuneração</th>
+                          <th class="text-center">Status</th>
                           <th class="text-center">Ações</th>
                         </tr>
                       </thead>
@@ -47,15 +35,23 @@
                                 $local = $vaga->find($vaga->id)->relLocal;   
                             @endphp
                             <tr>
-                                <td>{{$vaga->id}}</td>
-                                <td style="width:35%">{{$vaga->nome}}</td>
-                                <td>{{$tipo->nome}}</td>
-                                <td>{{$local->nome}}</td>
-                                <td>{{$vaga->remuneracao}}</td>
-                                <td>
-                                    <a href="{{route('vagas.show', $vaga->id)}}" class="btn btn-primary">Visualizar</a>
-                                    <a href="{{route('vagas.edit', $vaga->id)}}" class="btn btn-success">Editar</a>
-                                    <a href="javascript:delete_post('{{route('vagas.destroy', $vaga->id)}}')" class="btn btn-danger">Excluir</a>
+                                <td class="text-center">{{$vaga->id}}</td>
+                                <td class="text-center">{{$vaga->nome}}</td>
+                                <td class="text-center">{{$tipo->nome}}</td>
+                                <td class="text-center">{{$local->nome}}</td>
+                                <td class="text-center">{{$vaga->remuneracao}}</td>
+                                <td class="text-center">{{$vaga->getStatus()}}</td>
+                                <td class="text-center">
+                                  @can ('anunciante')
+                                      <a href="{{route('vagas.show', $vaga->id)}}" class="btn btn-primary">Visualizar</a>
+                                      <a href="{{route('vagas.edit', $vaga->id)}}" class="btn btn-success">Editar</a>
+                                      <a href="javascript:delete_post('{{route('vagas.destroy', $vaga->id)}}')" class="btn btn-danger">Excluir</a>
+                                  @elsecan ('candidato')
+                                      <a href="{{route('vagas.show', $vaga->id)}}" class="btn btn-primary">Visualizar</a>
+                                      @if ($vaga->applied == false)
+                                        <a href="{{route('candidatos.candidatar', $vaga->id)}}" class="btn btn-success">Candidatar-se</a>
+                                      @endif
+                                  @endcan
                                 </td>
                             </tr>
                           @endforeach
@@ -82,12 +78,10 @@
   @csrf
   @method('DELETE')
 </form>
-
-
 @endsection
 
 @section('javascript')
-<script type="text/javascript">
+<script>
   var query=<?php echo json_encode((object)Request::only(['category','keyword','sortByComments'])); ?>;
 
 
