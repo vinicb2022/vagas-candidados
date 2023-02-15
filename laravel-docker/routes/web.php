@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'HomeController@index');
+Auth::routes();
+
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 Route::resource('/vagas', 'VagasController');
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/vagas', 'VagasController@index')->name('vagas.index');
+Route::get('/vagas/create', 'VagasController@create')->name('vagas.create');
+Route::post('/vagas/store', 'VagasController@store')->name('vagas.store');
+Route::get('/vagas/{id}', 'VagasController@show')->name('vagas.show');
+Route::get('/vagas/{id}/edit', 'VagasController@edit')->name('vagas.edit');
+Route::get('/vagas/{id}/update', 'VagasController@update')->name('vagas.update');
+Route::delete('/vagas/{id}/destroy', 'VagasController@destroy')->name('vagas.destroy');

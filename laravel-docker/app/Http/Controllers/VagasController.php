@@ -124,6 +124,8 @@ class VagasController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $this->vaga->where(['id' => $id])->delete();
+
+        return redirect('vagas')->with('sucess', 'Vaga deletada com sucesso');
     }
 }
