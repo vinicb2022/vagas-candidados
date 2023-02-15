@@ -31,7 +31,7 @@
                         </tr>
                         <tr>
                             <td>Remuneração</td>
-                            <td>{{$vaga->remuneracao}}</td>
+                            <td>{{number_format($vaga->remuneracao, 2, ',', '.')}}</td>
                         </tr>
                         @can ('candidato')
                         @if ($candidatoVaga)
@@ -45,8 +45,22 @@
                                 <td>Pendente</td>
                             </tr>
                         @endif
-                        @elsecan ('anunciante')
                         @endcan
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover table-bordered">
+                    <tbody>
+                        <th>Nome</th>
+                        <th>Email</th>
+                        <th>Telefone</th>
+                        <th>Ações</th>
+                        @foreach ($candidatosRegistrados as $candidato)
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

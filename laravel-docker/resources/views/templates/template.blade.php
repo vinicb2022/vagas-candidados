@@ -55,6 +55,9 @@
                                             {{ __('Logout') }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('vagas.index') }}">Vagas</a>
+                                        @can ('anunciante')
+                                            <a class="dropdown-item" href="{{ route('candidatos.index') }}">Candidatos</a>
+                                        @endcan
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                             @csrf
                                         </form>

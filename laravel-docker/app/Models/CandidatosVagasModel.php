@@ -9,5 +9,4 @@ class CandidatosVagasModel extends Model
     protected $table = 'candidatos_vagas';
     protected $fillable = ['candidato_id', 'vaga_id'];
 
-
 }

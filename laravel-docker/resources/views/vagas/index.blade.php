@@ -39,7 +39,7 @@
                                 <td class="text-center">{{$vaga->nome}}</td>
                                 <td class="text-center">{{$tipo->nome}}</td>
                                 <td class="text-center">{{$local->nome}}</td>
-                                <td class="text-center">{{$vaga->remuneracao}}</td>
+                                <td class="text-center">{{number_format($vaga->remuneracao, 2, ',', '.')}}</td>
                                 <td class="text-center">{{$vaga->getStatus()}}</td>
                                 <td class="text-center">
                                   @can ('anunciante')

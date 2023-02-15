@@ -27,7 +27,7 @@
                         </tr>
                         <tr>
                             <td>Telefone</td>
-                            <td>{{$candidato->telefone}}</td>
+                            <td>{{'(' . substr($candidato->telefone, 0, 2) . ')' . substr($candidato->telefone, 2, 4) . '-' . substr($candidato->telefone, 6, 4)}}</td>
                         </tr>
                         <tr>
                             <td>Descrição</td>

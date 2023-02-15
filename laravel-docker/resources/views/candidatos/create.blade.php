@@ -25,10 +25,10 @@
             <input class="form-control" type="text" name="nome" id="nome" placeholder="Inserir nome do candidato" value="{{$candidato->nome ?? ''}}" required>
             <input class="form-control" type="text" name="email" id="email" placeholder="Inserir endereço de email" value="{{$candidato->email ?? ''}}" required>
             <input class="form-control" type="text" name="telefone" id="telefone" placeholder="Inserir número de Telefone" value="{{$candidato->telefone ?? ''}}" required>
-            <textarea class="form-control" name="descricao" id="descricao" cols="4" rows="3" placeholder="Inserir descrição do candidato" value="{{$candidato->descricao ?? ''}}" required></textarea>
-            <textarea class="form-control" name="formacaoAcademica" id="formacao-academica" cols="4" rows="3" placeholder="Inserir formação acadêmica" value="{{$candidato->formacao ?? ''}}" required></textarea>
-            <textarea class="form-control" name="experienciaProfissional" id="experiencia-profissional" cols="4" rows="3" placeholder="Inserir experiência profissional" value="{{$candidato->experiencia ?? ''}}" required></textarea>
-            <textarea class="form-control" name="habilidadesEspecificas" id="habilidades-especificas" cols="4" rows="3" placeholder="Inserir habilidades específicas" value="{{$candidato->habilidades ?? ''}}" required></textarea>
+            <input class="form-control" type="textarea" name="descricao" id="descricao" placeholder="Inserir sua descrição como profissional" value="{{$vaga->descricao ?? ''}}" required>
+            <input class="form-control" type="textarea" name="formacao" id="formacao" placeholder="Inserir formação academica" value="{{$vaga->formacao_academica ?? ''}}" required>
+            <input class="form-control" type="textarea" name="experiencia" id="experiencia" placeholder="Inserir experiência profissional" value="{{$vaga->experiencia_profissional ?? ''}}" required>
+            <input class="form-control" type="textarea" name="habilidades" id="habilidades" placeholder="Inserir habilidades específicas" value="{{$vaga->habilidades_especificas ?? ''}}" required>
             <input class="btn btn-primary btn-submit" type="submit" value="@if(isset($candidato)) Editar Candidato @else Cadastrar Candidato @endif">
             <a href="{{url('candidatos')}}" class="btn btn-danger btn-submit">Voltar</a>
         </form>

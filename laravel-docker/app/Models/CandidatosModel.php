@@ -12,5 +12,4 @@ class CandidatosModel extends Model
     public function relUsuario() {
         return $this->hasOne('App\User', 'id', 'usuario_id');
     }
-
 }

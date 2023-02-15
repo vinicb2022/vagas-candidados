@@ -83,15 +83,21 @@ class VagasController extends Controller
         $local = $vaga->find($vaga->id)->relLocal;
         $id = Auth::id();
         $candidato = $this->candidato->where(['usuario_id' => $id])->get()->first();
-
-        $candidatoVaga = $this->candidatoVaga->where([
+        if ($candidato) {
+            $candidatoVaga = $this->candidatoVaga->where([
                                                     'candidato_id' => $candidato['id'],
                                                     'vaga_id' => $vaga->id
                                                  ])
-                                             ->get()
-                                             ->first(); 
+                                                 ->get()
+                                                 ->first(); 
+        }
 
-        return view('vagas.show', compact('vaga', 'tipo', 'local', 'candidatoVaga'));
+        $candidatosRegistrados = $this->candidatoVaga->where([
+                                                        'vaga_id' => $id
+                                                     ])
+                                                     ->get();
+    
+        return view('vagas.show', @compact('vaga', 'tipo', 'local', 'candidatoVaga', 'candidatosRegistrados'));
     }
 
     public function edit($id)
