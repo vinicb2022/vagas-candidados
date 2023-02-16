@@ -81,8 +81,8 @@ class VagasController extends Controller
         $vaga = $this->vaga->find($id);
         $tipo = $vaga->find($vaga->id)->relTipo;
         $local = $vaga->find($vaga->id)->relLocal;
-        $id = Auth::id();
-        $candidato = $this->candidato->where(['usuario_id' => $id])->get()->first();
+        $idUsuario = Auth::id();
+        $candidato = $this->candidato->where(['usuario_id' => $idUsuario])->get()->first();
         if ($candidato) {
             $candidatoVaga = $this->candidatoVaga->where([
                                                     'candidato_id' => $candidato['id'],
@@ -96,6 +96,7 @@ class VagasController extends Controller
                                                         'vaga_id' => $id
                                                      ])
                                                      ->get();
+
         if ($candidatosRegistrados) {
             foreach ($candidatosRegistrados as $candidato) {
                 $dados = $this->candidato->where(['id' => $candidato->candidato_id])->get()->first();

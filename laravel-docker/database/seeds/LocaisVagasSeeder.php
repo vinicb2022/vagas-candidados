@@ -13,14 +13,17 @@ class LocaisVagasSeeder extends Seeder
     public function run(LocaisVagasModel $local)
     {
         $local->create([
+            'id' => 1,
             'nome' => 'Presencial'
         ]);
 
         $local->create([
+            'id' => 2,
             'nome' => 'Híbrido'
         ]);
 
         $local->create([
+            'id' => 3,
             'nome' => 'Remoto'
         ]);
     }

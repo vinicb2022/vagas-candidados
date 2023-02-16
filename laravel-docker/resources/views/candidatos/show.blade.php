@@ -4,16 +4,6 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card-header">
-                <div class="d-flex justify-content-between" >
-                    <div>Candidato: {{$candidato->nome}} </div>
-                    @can ('anunciante')
-                        <div><a href="{{route('candidatos.index')}}" class="btn btn-success">Voltar</a></div>
-                    @elsecan ('candidato')
-                        <div><a href="{{route('home')}}" class="btn btn-success">Voltar</a></div>
-                    @endcan
-                </div>
-            </div>
             <div class="card-body">
                 <table class="table table-striped table-hover table-bordered">
                     <tbody>
@@ -27,7 +17,7 @@
                         </tr>
                         <tr>
                             <td>Telefone</td>
-                            <td>{{'(' . substr($candidato->telefone, 0, 2) . ')' . substr($candidato->telefone, 2, 4) . '-' . substr($candidato->telefone, 6, 4)}}</td>
+                            <td>{{$candidato->telefone}}</td>
                         </tr>
                         <tr>
                             <td>Descrição</td>

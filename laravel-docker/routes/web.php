@@ -40,7 +40,7 @@ Route::get('/candidatos/create', 'CandidatosController@create')->name('candidato
 Route::post('/candidatos/store', 'CandidatosController@store')->name('candidatos.store');
 Route::get('/candidatos/{id}', 'CandidatosController@show')->name('candidatos.show');
 Route::get('/candidatos/{id}/edit', 'CandidatosController@edit')->name('candidatos.edit');
-Route::get('/candidatos/{id}/update', 'CandidatosController@update')->name('candidatos.update');
+Route::post('/candidatos/{id}/update', 'CandidatosController@update')->name('candidatos.update');
 Route::delete('/candidatos/{id}/destroy', 'CandidatosController@destroy')->name('candidatos.destroy');
 Route::get('/candidatos/{id}/candidatar', 'CandidatosController@candidatar')->name('candidatos.candidatar');
 

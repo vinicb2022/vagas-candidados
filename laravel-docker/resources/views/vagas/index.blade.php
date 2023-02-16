@@ -10,7 +10,6 @@
                       <div class="d-flex justify-content-between" >
                           <div>Vagas</div>
                           <div class="add-button"><a href="{{route('vagas.create')}}" class="btn btn-success">Criar Vaga</a></div>
-                          <div><button type="button" class="btn btn-danger" id="deleteSelectedRecords">Deletar selecionados</button></div>
                       </div>
                   </div>
                 @endcan
@@ -19,7 +18,6 @@
                     <table style="width: 100%;" class="table table-stripped ">
                       <thead>
                         <tr>
-                          <th class="text-center"><input type="checkbox" id="checkAll"></th>
                           <th class="text-center">Nome</th>
                           <th class="text-center">Tipo</th>
                           <th class="text-center">Local</th>
@@ -36,7 +34,6 @@
                                 $local = $vaga->find($vaga->id)->relLocal;   
                             @endphp
                             <tr id="vid{{$vaga->id}}">
-                                <td class="text-center"><input type="checkbox" name="ids" class="check" value="{{$vaga->id}}"></td>
                                 <td class="text-center">{{$vaga->nome}}</td>
                                 <td class="text-center">{{$tipo->nome}}</td>
                                 <td class="text-center">{{$local->nome}}</td>
@@ -49,7 +46,7 @@
                                       <a href="javascript:delete_post('{{route('vagas.destroy', $vaga->id)}}')" class="btn btn-danger">Excluir</a>
                                   @elsecan ('candidato')
                                       <a href="{{route('vagas.show', $vaga->id)}}" class="btn btn-primary">Visualizar</a>
-                                      @if ($vaga->applied == false)
+                                      @if ($vaga->applied == false && $vaga->status == 1)
                                         <a href="{{route('candidatos.candidatar', $vaga->id)}}" class="btn btn-success">Candidatar-se</a>
                                       @endif
                                   @endcan
@@ -105,33 +102,5 @@
       } 
     });
   }
-
-  $(function(e) {
-    $('#checkAll').click(function(){
-      $('.check').prop('checked', $(this).prop('checked'));
-    });
-
-    $('#deleteSelectedRecords').click(function(e) {
-        e.preventDefault();
-        var allids = [];
-        $('input:checkbox[name=ids]:checked').each(function(){
-            allids.push($(this).val());
-        });
-        $.ajax({
-            url: "{{route('vagas.deleteSelected')}}",
-            type: 'DELETE',
-            data: {
-                ids: allids,
-                _token:$('input[name=_token]').val()
-            },
-            success:function(response) {
-               $.each(allids, function(key, val){
-                    $('#vid'+val).remove();
-               }) 
-            }
-        })
-    })
-  });
-
 </script>
 @endsection

@@ -5,17 +5,20 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CandidatosModel;
 use App\Models\CandidatosVagasModel;
+use App\Models\VagasModel;
 use Illuminate\Support\Facades\Auth;
 
 class CandidatosController extends Controller
 {
     private $candidato;
     private $candidatoVaga;
+    private $vaga;
 
     public function __construct()
     {
         $this->candidato = new CandidatosModel();
         $this->candidatoVaga = new CandidatosVagasModel();
+        $this->vaga = new VagasModel();
     }
 
     public function index()
@@ -56,13 +59,17 @@ class CandidatosController extends Controller
                                         'habilidades_especificas' => $request->habilidades,
                                         'usuario_id' => $id
                                     ]);
-
-        if ($cadastro) {
-            return redirect('candidatos')->with('success', 'Candidato criada com sucesso');
+        if ('anunciante') {
+            if ($cadastro) {
+                return redirect('candidatos')->with('success', 'Candidato criada com sucesso');
+            }
+            else {
+                return redirect('candidatos')->with('error', 'Candidato não pode ser criado');
+            }
         }
         else {
-            return redirect('candidatos')->with('error', 'Candidato não pode ser criado');
-        }
+            return redirect('home');
+        }                        
     }
 
     /**

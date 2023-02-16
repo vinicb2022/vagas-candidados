@@ -13,14 +13,17 @@ class TiposVagasSeeder extends Seeder
     public function run(TiposVagasModel $tipo)
     {
         $tipo->create([
+            'id' => 1,
             'nome' => 'CLT'
         ]);
 
         $tipo->create([
+            'id' => 2,
             'nome' => 'Pessoa Jurídica'
         ]);
 
         $tipo->create([
+            'id' => 3,
             'nome' => 'Freelancer'
         ]);
     }

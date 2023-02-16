@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(LocaisVagasSeeder::class);
         $this->call(TiposVagasSeeder::class);
+        $this->call(VagasSeeder::class);
     }
 }

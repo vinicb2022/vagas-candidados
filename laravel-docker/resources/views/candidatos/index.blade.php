@@ -30,7 +30,7 @@
                                 <td class="text-center">{{$candidato->id}}</td>
                                 <td class="text-center">{{$candidato->nome}}</td>
                                 <td class="text-center">{{$candidato->email}}</td>
-                                <td class="text-center">{{'(' . substr($candidato->telefone, 0, 2) . ')' . substr($candidato->telefone, 2, 4) . '-' . substr($candidato->telefone, 6, 4)}}</td>
+                                <td class="text-center">{{$candidato->telefone}}</td>
                                 <td class="text-center">
                                   @can ('anunciante')
                                     <a href="{{route('candidatos.show', $candidato->id)}}" class="btn btn-primary">Visualizar</a>
