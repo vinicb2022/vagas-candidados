@@ -33,6 +33,7 @@ Route::get('/vagas/{id}/edit', 'VagasController@edit')->name('vagas.edit');
 Route::get('/vagas/{id}/update', 'VagasController@update')->name('vagas.update');
 Route::delete('/vagas/{id}/destroy', 'VagasController@destroy')->name('vagas.destroy');
 Route::get('/vagas/{id}/{status}', 'VagasController@changeStatus')->name('vagas.status');
+Route::delete('/selected-vagas', 'VagasController@deleteSelected')->name('vagas.deleteSelected');
 
 Route::get('/candidatos', 'CandidatosController@index')->name('candidatos.index');
 Route::get('/candidatos/create', 'CandidatosController@create')->name('candidatos.create');

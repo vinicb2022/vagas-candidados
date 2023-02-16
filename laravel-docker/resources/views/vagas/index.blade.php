@@ -9,7 +9,8 @@
                   <div class="card-header">
                       <div class="d-flex justify-content-between" >
                           <div>Vagas</div>
-                          <div><a href="{{route('vagas.create')}}" class="btn btn-success">Criar Vaga</a></div>
+                          <div class="add-button"><a href="{{route('vagas.create')}}" class="btn btn-success">Criar Vaga</a></div>
+                          <div><button type="button" class="btn btn-danger" id="deleteSelectedRecords">Deletar selecionados</button></div>
                       </div>
                   </div>
                 @endcan
@@ -18,7 +19,7 @@
                     <table style="width: 100%;" class="table table-stripped ">
                       <thead>
                         <tr>
-                          <th class="text-center">ID</th>
+                          <th class="text-center"><input type="checkbox" id="checkAll"></th>
                           <th class="text-center">Nome</th>
                           <th class="text-center">Tipo</th>
                           <th class="text-center">Local</th>
@@ -34,8 +35,8 @@
                                 $tipo = $vaga->find($vaga->id)->relTipo;
                                 $local = $vaga->find($vaga->id)->relLocal;   
                             @endphp
-                            <tr>
-                                <td class="text-center">{{$vaga->id}}</td>
+                            <tr id="vid{{$vaga->id}}">
+                                <td class="text-center"><input type="checkbox" name="ids" class="check" value="{{$vaga->id}}"></td>
                                 <td class="text-center">{{$vaga->nome}}</td>
                                 <td class="text-center">{{$tipo->nome}}</td>
                                 <td class="text-center">{{$local->nome}}</td>
@@ -57,7 +58,7 @@
                           @endforeach
                         @else
                           <tr>
-                            <td colspan="6" >Nenhuma vaga encontrada</td>
+                            <td colspan="7" >Nenhuma vaga encontrada</td>
                           </tr>
                         @endif
                       </tbody>
@@ -78,28 +79,16 @@
   @csrf
   @method('DELETE')
 </form>
+
+<style>
+    .add-button {
+        margin-left: 730px;
+    }
+</style>
 @endsection
 
 @section('javascript')
 <script>
-  var query=<?php echo json_encode((object)Request::only(['category','keyword','sortByComments'])); ?>;
-
-
-  function search_post(){
-
-    Object.assign(query,{'category': $('#category_filter').val()});
-    Object.assign(query,{'keyword': $('#keyword').val()});
-
-    window.location.href="{{route('vagas.index')}}?"+$.param(query);
-
-  }
-
-  function sort(value){
-    Object.assign(query,{'sortByComments': value});
-
-    window.location.href="{{route('vagas.index')}}?"+$.param(query);
-  }
-
   function delete_post(url){
 
     swal({
@@ -116,6 +105,33 @@
       } 
     });
   }
+
+  $(function(e) {
+    $('#checkAll').click(function(){
+      $('.check').prop('checked', $(this).prop('checked'));
+    });
+
+    $('#deleteSelectedRecords').click(function(e) {
+        e.preventDefault();
+        var allids = [];
+        $('input:checkbox[name=ids]:checked').each(function(){
+            allids.push($(this).val());
+        });
+        $.ajax({
+            url: "{{route('vagas.deleteSelected')}}",
+            type: 'DELETE',
+            data: {
+                ids: allids,
+                _token:$('input[name=_token]').val()
+            },
+            success:function(response) {
+               $.each(allids, function(key, val){
+                    $('#vid'+val).remove();
+               }) 
+            }
+        })
+    })
+  });
 
 </script>
 @endsection

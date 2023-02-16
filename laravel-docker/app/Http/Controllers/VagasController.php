@@ -96,6 +96,14 @@ class VagasController extends Controller
                                                         'vaga_id' => $id
                                                      ])
                                                      ->get();
+        if ($candidatosRegistrados) {
+            foreach ($candidatosRegistrados as $candidato) {
+                $dados = $this->candidato->where(['id' => $candidato->candidato_id])->get()->first();
+                $candidato->nome = $dados->nome;
+                $candidato->email = $dados->email;
+                $candidato->telefone = $dados->telefone;
+            }
+        }
     
         return view('vagas.show', @compact('vaga', 'tipo', 'local', 'candidatoVaga', 'candidatosRegistrados'));
     }
@@ -131,7 +139,8 @@ class VagasController extends Controller
         return redirect('vagas')->with('success', 'Vaga deletada com sucesso');
     }
 
-    public function changeStatus($id, $status) {
+    public function changeStatus($id, $status) 
+    {
         if ($status == 1) {
             $this->vaga->where(['id' => $id])->update(['status' => 2]);
         }
@@ -142,5 +151,13 @@ class VagasController extends Controller
 
         return redirect('vagas')->with('success', 'Vaga atualizada com sucesso');
 
+    }
+
+    public function deleteSelected(Request $request) 
+    {
+        $ids = $request->ids;
+        $this->vaga->whereIn('id', [$ids])->delete();
+
+        return redirect('vagas')->with('success', 'Vaga(s) deletadas com sucesso');
     }
 }

@@ -45,7 +45,7 @@ class CandidatosController extends Controller
     {
 
         $id = Auth::id();
-        
+
         $cadastro = $this->candidato->create([
                                         'nome' => $request->nome,
                                         'email' => $request->email,
@@ -56,6 +56,7 @@ class CandidatosController extends Controller
                                         'habilidades_especificas' => $request->habilidades,
                                         'usuario_id' => $id
                                     ]);
+
         if ($cadastro) {
             return redirect('candidatos')->with('success', 'Candidato criada com sucesso');
         }
@@ -123,7 +124,7 @@ class CandidatosController extends Controller
     {
         $this->candidato->where(['id' => $id])->delete();
 
-        return redirect('vagas')->with('success', 'Candidato deletado com sucesso');
+        return redirect('candidatos')->with('success', 'Candidato deletado com sucesso');
     }
 
     public function candidatar($vagaId) {
