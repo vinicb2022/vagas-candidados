@@ -1,6 +1,3 @@
-# vinicius-avanz
-Teste Prático Vinícius Castello Branco - Avanz Tecnologia
-
 Projeto realizado em Laravel e Docker 
 
 # docker-compose up -d nginx mysql phpmyadmin
